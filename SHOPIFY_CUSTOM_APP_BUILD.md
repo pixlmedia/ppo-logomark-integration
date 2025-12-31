@@ -179,3 +179,43 @@ Building a custom Shopify app (internal/private) on the password-protected PPO l
                                                                                                                       
                                                                                                                        10. **Phase 4 Status**: Custom App Build Guide Created
                                                                                                                        11. **Next**: Build and integrate custom pricing app on PPO password-protected site  
+
+
+## CRITICAL: Real-Time Inventory Sync Required
+
+**Option A is MANDATORY** (not optional). After 8 years discontinuing Logo Mark due to inventory failures (customers upset over out-of-stock orders after proofs), inventory must be real-time and accurate.
+
+### Per-Color Inventory Control
+
+Logo Mark provides qty-on-hand per color. Store in metafield: `logomark_custom.inventory_status` (JSON)
+
+**Structure**:
+```json
+{
+  "last_updated": "2025-12-31T14:30:00Z",
+  "low_stock_threshold": 5,
+  "colors": {
+    "red": {"qty_on_hand": 45, "status": "in_stock"},
+    "blue": {"qty_on_hand": 2, "status": "low_stock"},
+    "green": {"qty_on_hand": 0, "status": "out_of_stock"},
+    "yellow": {"qty_on_hand": 120, "status": "in_stock"}
+  }
+}
+```
+
+### Product Behavior
+- **IN STOCK**: Option enabled, can select normally
+- - **LOW STOCK** (below threshold): Option enabled with warning badge "Only X left"
+  - - **OUT OF STOCK**: Option disabled/grayed, cannot select
+    - - **Key**: Disable only out-of-stock colors. Product stays available if ANY color in stock.
+     
+      - ### Custom App Requirements
+      - 1. Pull inventory from Logo Mark API/feed (hourly sync)
+        2. 2. Update `inventory_status` metafield per product
+           3. 3. Modify product.liquid to disable out-of-stock color options
+              4. 4. Add stock status labels to dropdown options
+                 5. 5. Prevent checkout if all colors out of stock
+                   
+                    6. Phase 4 Status: Custom App Build Guide + Inventory Architecture Defined
+                    7. Next Phase: Build Node.js app for inventory sync + integrate with Shopify
+                    8. 
